@@ -35,11 +35,16 @@ form-control-line form-user-input" name="nama_barang" id="nama_barang">
     $('#formBarang').on('submit', function (e) {
         e.preventDefault();
         sendDataPost();
-    })
+    });
 
     function sendDataPost() {
-        var link = 'http://localhost/backend_inventory_4133/barang/create_action/';
-
+		<?php
+			if ($title == 'Form Edit Data Barang') {
+				echo "var link = 'http://localhost/backend_inventory_4133/barang/update_action/';";
+			} else {
+				echo "var link = 'http://localhost/backend_inventory_4133/barang/create_action/';";
+			}
+		?>
         var dataForm = {};
         var allInput = $('.form-user-input');
 
@@ -60,4 +65,34 @@ form-control-line form-user-input" name="nama_barang" id="nama_barang">
             }
         });
     }
+
+	function getDetail(id_barang) {
+		var link = 'http://localhost/backend_inventory_4133/barang/detail?id_barang='+id_barang;
+
+		$.ajax(link, {
+			type: 'GET',
+			success: function (data, status, xhr) {
+				var data_obj = JSON.parse(data);
+
+				if(data_obj['sukses'] == 'ya') {
+					var detail = data_obj['detail'];
+					$('#nama_barang').val(detail['nama_barang']);
+					$('#id_barang').val(detail['id_barang']);
+					$('#deskripsi').val(detail['deskripsi']);
+					$('#stok').val(detail['stok']);
+				} else {
+					alert('Data Tidak Ditemukan');
+				}
+			},
+			error: function (jqXHR, textStatus, errorMsg) {
+				alert('Error : ' + errorMsg);
+			}
+		});
+	}
+
+	<?php
+		if ($title == 'Form Edit Data Barang') {
+			echo 'getDetail('.$id_barang.');';
+		}
+	?>
 </script>

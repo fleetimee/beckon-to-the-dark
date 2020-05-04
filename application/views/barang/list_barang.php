@@ -16,6 +16,8 @@
 </div>
 
 <script type="text/javascript">
+
+
     function loadKonten(url) {
         $.ajax(url, {
             type: 'GET',
@@ -24,12 +26,20 @@
 
                 $('#table_barang').html(objData.konten);
 
+                reload_event();
             },
             error: function (jqXHR, textstatus, errorMsg) {
                 alert('Error : ' + errorMsg);
             }
         })
     }
+
+function reload_event() {
+    $('.linkEditBarang').on('click', function () {
+        var hashClean = this.hash.replace('#', '');
+        loadMenu('<?= base_url('barang/form_edit/')?>' + hashClean);
+    });
+}
 
     loadKonten('http://localhost/backend_inventory_4133/barang/list_barang');
 </script>
