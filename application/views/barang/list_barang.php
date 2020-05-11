@@ -7,6 +7,30 @@
 
                 <hr>          
 
+                <div class="row">
+                    <div class="col-md-3">
+                        <label for="">Nama Barang</label> <br>
+                        <input type="text" name="cari_nama" id="cari_nama" class="form-control form-input-cari">
+                    </div>
+
+                    <div class="col-md-3">
+                        <label for="">Deskripsi</label> <br>
+                        <input type="text" name="cari_desk" id="cari_desk" class="form-control form-input-cari">
+                    </div>
+
+                    <div class="col-md-3">
+                        <label for="">Maksimal Stok</label> <br>
+                        <input type="text" name="cari_stok" id="cari_stok" class="form-control form-input-cari">
+                    </div>
+
+                    <div class="col-md-3">
+                        <br>
+                        <button class="btn btn-info" id="btn-cari">Cari Barang</button>
+                    </div>
+                </div>
+
+                <hr>
+
                 <h4>Dibawah Ini Adalah Data Barang</h4>
                 <table id="table_barang" class="table"> 
                 </table>
@@ -46,7 +70,8 @@
     }
 
     function hapusData(id_barang) {
-        var url = 'http://localhost/backend_inventory_4133/barang/delete_data?id_barang='+id_barang;
+        // var url = 'http://localhost/backend_inventory_4133/barang/delete_data?id_barang='+id_barang;
+        var url = 'http://localhost/backend_inventory_4133/barang/soft_delete_data?id_barang='+id_barang;
 
         $.ajax(url, {
             type: 'GET',
@@ -60,6 +85,34 @@
             }
         })
     }
+
+    function cariData() {
+        var url = 'http://localhost/backend_inventory_4133/barang/cari_barang';
+        var dataForm = {};
+        var allInput = $('.form-input-cari');
+
+        $.each(allInput, function (i, val) {
+            dataForm[val['name']] = val['value'];
+        });
+
+        $.ajax(url, {
+            type: 'POST',
+            data: dataForm,
+            success: function (data, status, xhr) {
+                var objData = JSON.parse(data);
+                $('#table_barang').html(objData.konten);
+
+                reload_event();
+            },
+            error: function (jqXHR, textStatus, errorMsg) {
+                alert('Error : ' + errorMsg);
+            }
+        })
+    }
+
+    $('#btn-cari').on('click', function () {
+        cariData();
+    });
 
     loadKonten('http://localhost/backend_inventory_4133/barang/list_barang');
 </script>
