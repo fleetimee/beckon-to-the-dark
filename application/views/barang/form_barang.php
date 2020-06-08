@@ -1,3 +1,44 @@
+<style type="text/css">
+	.upload-area{
+		width: 70%;
+		height: 350px;
+		border: 2px solid lightgray;
+		border-radius: 3px;
+		margin: 0 auto;
+		text-align: center;
+		overflow: auto;
+	}
+
+	.upload-area:hover{
+		cursor: pointer;
+	}
+
+	.upload-area h2{
+		text-align: center;
+		font-weight: normal;
+		font-family: sans-serif;
+		line-height: 50px;
+		color: darkslategray;
+	}
+
+	#file{
+		display: none;
+	}
+
+	.thumbnail{
+		width: 80px;
+		height: 80px;
+		padding: 2px;
+		border: 2px solid lightgray;
+		border-radius: 3px;
+		float: left;
+	}
+
+	.size{
+		font-size: 12px;
+	}
+</style>
+
 <div class="row">
 	<div class="col-12">
 		<div class="card">
@@ -22,6 +63,19 @@ form-control-line form-user-input" name="nama_barang" id="nama_barang">
 						<label class="col-md-12">Stok</label>
 						<div class="col-md-12">
 						<input type="number" class="form-control form-control-line form-user-input" name="stok" id="stok" placeholder="0">
+						</div>
+					</div>
+					<div class="form-group">
+						<label for="upload" class="col-md-12">Upload Foto</label>
+						<div class="col-md-12">
+							<input type="file" name="file" id="file">
+
+							<div class="upload-area" id="uploadfile">
+								<h2>Drag and drop file here <br>
+									or <br>
+									Click to Select file
+								</h2>
+							</div>
 						</div>
 					</div>
 					<div class="form-group">
@@ -50,19 +104,24 @@ form-control-line form-user-input" name="nama_barang" id="nama_barang">
 				echo "var link = 'http://localhost/backend_inventory_4133/barang/create_action/';";
 			}
 		?>
-        var dataForm = {};
+        var dataForm = new FormData();
         var allInput = $('.form-user-input');
 
-        $.each(allInput, function (i, val) {
-            dataForm[val['name']] = val['value'];
-        });
+		$.each(allInput, function (i, val) {
+			dataForm.append(val['name'], val['value']);
+		});
+
+		var file = $('#file')[0].files[0];
+		dataForm.append('file', file);
 
         $.ajax(link, { 
             type: 'POST',
             data: dataForm,
+			contentType: false,
+			processData: false,
+			dataType: 'json',
             success: function (data, status, xhr) {
-                var data_str = JSON.parse(data);
-                alert(data_str['pesan']);
+                alert(data['pesan']);
                 loadMenu('<?= base_url('barang')?>');
             },
             error: function (jqXHR, textStatus, errorMsg) {
@@ -94,6 +153,49 @@ form-control-line form-user-input" name="nama_barang" id="nama_barang">
 			}
 		});
 	}
+
+	$("html").on("drop", function (e) {
+		e.preventDefault();
+		e.stopPropagation();
+	});
+
+	$("html").on("dragover", function(e) {
+		e.preventDefault();
+		e.stopPropagation();
+		$(".upload-area > h2").text("Drag here");
+	});
+
+	$('.upload-area').on('dragenter', function (e){
+		e.stopPropagation();
+		e.preventDefault();
+		$(".upload-area > h2").text("Drop");
+	});
+
+	$('.upload-area').on('dragover', function (e) {
+		e.stopPropagation();
+		e.preventDefault();
+		$(".upload-area > h2").text("Drop !!");
+	});
+
+	$(".upload-area").on("drop", function (e) {
+		e.preventDefault();
+		e.stopPropagation();
+
+		var file = e.originalEvent.dataTransfer.files;
+		$("#file")[0].files = file;
+		console.log(file);
+		$(".upload-area > h2").text("File yang dipilih : " + file[0].name);
+	});
+
+	$(".upload-area").click(function(){
+		$("#file").click();
+	});
+
+	$("#file").change(function () {
+		var file = $("#file")[0].files[0];
+		console.log(file);
+		$(".upload-area > h2").text("File yang dipilih : " + file.name);
+	});
 
 	<?php
 		if ($title == 'Form Edit Data Barang') {
