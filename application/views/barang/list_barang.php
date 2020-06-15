@@ -33,12 +33,23 @@
 
                 <h4>Dibawah Ini Adalah Data Barang</h4>
                 <table id="table_barang" class="table"> 
+                    <thead>
+                        <tr>
+                            <th>Nama</th>
+                            <th>Deskripsi</th>
+                            <th>Stok</th>
+                            <th>Foto</th>
+                            <th>Aksi</th>
+                        </tr>
+                    </thead>
                 </table>
+
             </div>
         </div>
     </div>
 </div>
 
+<script type="text/javascript" src="https://cdn.datatables.net/v/bs4/dt-1.10.21/datatables.min.js"></script>
 <script type="text/javascript">
 
     function loadKonten(url) {
@@ -67,6 +78,8 @@
             var hashClean = this.hash.replace('#', '');
             hapusData(hashClean);
         });
+
+        $('#table_barang').DataTable();
     }
 
     function hapusData(id_barang) {
@@ -114,5 +127,16 @@
         cariData();
     });
 
+    // $(document).ready(function() {
+    //     $('#table_barang').DataTable({
+    //         "processing": true,
+    //         "serverSide": true,
+    //         "lengthMenu": [[1, 2, 3, -1],[1, 2, 3, "ALL"]],
+    //         "ajax": "http://localhost/backend_inventory_4133/barang/list_barang_ajax",
+    //         "fnDrawCallback" : function () {
+    //             reload_event();
+    //         }
+    //     } );
+    // } );
     loadKonten('http://localhost/backend_inventory_4133/barang/list_barang');
 </script>

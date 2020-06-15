@@ -13,6 +13,7 @@
     <title>Xtreme Admin Template - The Ultimate Multipurpose admin template</title>
     <!-- Custom CSS -->
     <link href="<?= base_url('assets/xtreme_admin_lite/') ?>css/style.min.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4/dt-1.10.21/datatables.min.css"/>
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -275,6 +276,7 @@
     <script src="<?= base_url('assets/xtreme_admin_lite/') ?>js/sidebarmenu.js"></script>
     <!--Custom JavaScript -->
     <script src="<?= base_url('assets/xtreme_admin_lite/') ?>js/custom.js"></script>
+    
     <script type="text/javascript">
         function loadMenu(url) {
             $.ajax(url, {
